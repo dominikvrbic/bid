@@ -1,0 +1,21 @@
+{
+  "name": "bid",
+  "version": "1.0.0",
+  "description": "Bid",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dominik Vrbic",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "express": "^4.17.1",
+    "pg": "^7.12.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.12.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^5.5.0"
+  }
+}
