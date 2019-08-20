@@ -1,6 +1,6 @@
 const express = require('express');
 const enableWs = require('express-ws');
-
+const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const config = require('./config/database.json')['development'];
 
@@ -19,7 +19,7 @@ async function addUser(userData) {
 }
 
 async function tryLogin(email, password) {
-    const user = await User.findOne({where: { email }});
+    const user = await User.findOne({ where: { email } });
     if (!user) {
         return null;
     }
@@ -39,19 +39,25 @@ async function tryLogin(email, password) {
 
 const app = express();
 enableWs(app);
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send('Alo bre');
 });
+app.post('/register', (req, res) => {
+    res.send({
+        message: `${req.body.email}user was reged`
+    })
 
+})
 function wsSend(socket, type, data) {
-    const msg = {type, data};
+    const msg = { type, data };
     socket.send(JSON.stringify(msg));
 }
 
 app.ws('/socket', (ws, req) => {
     setInterval(() => {
-        wsSend(ws, 'priceChange', {price: 100, imageId: 123});
+        wsSend(ws, 'priceChange', { price: 100, imageId: 123 });
     }, 2000);
 
     ws.on('message', msg => {
