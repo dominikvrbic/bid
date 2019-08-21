@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const Sequelize = require('sequelize');
 const config = require('./config/database.json')['development'];
-const Bid = require('./db/models/bid');
-const Picture = require('./db/models/picture');
 
 const app = express();
 app.use(cors());
@@ -13,6 +11,8 @@ app.use(cors());
 console.log('Config? ', config);
 const sequelize = new Sequelize(config);
 const User = sequelize.import('./db/models/user.js');
+const Bid = sequelize.import('./db/models/bid.js');
+const Picture = sequelize.import('./db/models/picture.js');
 console.log('User?', User);
 
 app.get('/', (req, res) => res.send('Alo bre'));
@@ -56,10 +56,9 @@ async function tryLogin(email, password) {
 // addImg({
 //     title: 'prva',
 //     photographer: 'idk',
-//     imageFilename: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiZ5K3X55PkAhU2SxUIHYELADoQMwhCKAIwAg&url=http%3A%2F%2Fqnimate.com%2Funderstanding-html-img-tag%2F&psig=AOvVaw08nQ8GTGPfTIsy1lU6-ZbH&ust=1566471625388765&ictx=3&uact=3',//url
+//     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg',//url, max 255 characters
 //     startingPrice: 10,
-
-// })
+// });
 
 //tryLogin('dvrbic@gmail.com', 'blabla').then(user => console.log('User: ', user));
 
@@ -102,10 +101,10 @@ async function bid(req, res) {
 }
 
 function allImages(req, res) {
-    console.log(123);
-    Picture.findAll({attributes: ['url', 'title', 'photographer', 'id']})
+    console.log(Picture);
+    Picture.findAll({attributes: ['imageFilename', 'title', 'photographer', 'id']})
         .then(pictures => {
-            res.send(JSON.stringify({ "response": pictures }));
+            res.send(JSON.stringify(pictures));
         })
         .catch(err => res.send({
             message: `nekaj ne valja :${err}`
@@ -140,7 +139,7 @@ app.post('addimg',addImg)
 
 app.get('/bidup/:id', bid);
 
-app.get('/sveslike', allImages());
+app.get('/sveslike', allImages);
 
 app.get('/slika/:id', specImgage);
 //test
