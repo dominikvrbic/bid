@@ -1,24 +1,29 @@
 <template>
-  <v-app>
-    <v-app-bar app></v-app-bar>
-
-    <v-content>
-      <login />
-    </v-content>
-  </v-app>
+  <div id="app">
+    <login />
+  </div>
 </template>
 
 <script>
-import login from "./components/login";
-import reg from "./components/Register";
+import login from './components/login.vue'
+import Api from './api';
+
 
 export default {
-  name: "App",
+  name: 'app',
   components: {
     login
-  },
-  data: () => ({
-    //
-  })
-};
+  }
+}
 </script>
+
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>

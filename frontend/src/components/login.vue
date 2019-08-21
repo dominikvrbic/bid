@@ -1,29 +1,41 @@
 <template>
-  <v-content>
-    <div id="bg-particles"></div>
-    <v-form @submit.prevent="submit">
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4>
+  <v-app id="inspire">
+    <v-content>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
             <v-card class="elevation-12">
-              <v-toolbar dark color="primary">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
                 <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer></v-spacer>
+
               </v-toolbar>
-              <v-card-text>
-                <v-form>
+                              <v-form>
                   <v-text-field
-                    v-model="username"
-                    prepend-icon="person"
+                    v-model="email"
                     name="login"
                     label="Login"
                     type="text"
                     @keyup.native.enter="submit"
-                    :rules="usernameValid"
+                    :rules="emailValid"
                   ></v-text-field>
                   <v-text-field
                     v-model="password"
                     id="password"
-                    prepend-icon="lock"
                     name="password"
                     label="Password"
                     type="password"
@@ -31,67 +43,81 @@
                     :rules="passwordValid"
                   ></v-text-field>
                 </v-form>
-              </v-card-text>
+
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn type="submit" color="primary">Login</v-btn>
+                <v-btn @click="submit" color="primary">Login</v-btn>
               </v-card-actions>
             </v-card>
-            <v-alert :value="true" type="error" v-if="submitErr">
-              {{submitErr}}
-            </v-alert>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-container>
-    </v-form>
-  </v-content>
+    </v-content>
+  </v-app>
 </template>
 
+
 <script>
-import Api from '../api';
+import Api from "../api";
+
 export default {
   props: {
-    source: String,
+    source: String
   },
   data() {
     return {
-      username: '',
-      password: '',
-      submitErr: null,
+      email: "",
+      password: "",
+      submitErr: null
     };
   },
   computed: {
-    usernameValid() {
-      if (!this.username.length) {
-        return ['Required'];
+    emailValid() {
+      if (!this.email.length) {
+        return ["Required"];
       }
       return [];
     },
     passwordValid() {
       if (!this.password.length) {
-        return ['Required'];
+        return ["Required"];
       }
       return [];
-    },
+    }
   },
   methods: {
     async submit() {
-      if (!this.username || !this.password) {
+      
+      if (!this.email || !this.password) {
         return;
       }
       try {
-        await Api.post('/login', {
-          username: this.username,
-          password: this.password,
-        }, { withCredentials: true });
-        this.$emit('loggedIn');
+        await Api.post(
+          "/login",
+          {
+            email: this.email,
+            password: this.password
+          },
+          { withCredentials: true }
+        );
+        this.$emit("loggedIn");
       } catch (err) {
         if (err.response.data && err.response.data.error) {
           this.submitErr = err.response.data.error;
         }
       }
-    },
-  },
-
+    }
+  }
 };
 </script>
+
+<style>
+#bg-particles {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #00437a;
+  overflow: hidden;
+}
