@@ -17,8 +17,19 @@ console.log('User?', User);
 
 app.get('/', (req, res) => res.send('Alo bre'));
 
+async function addImg(imgData){
+    return Picture.create({
+        title: imgData.title,
+        photographer: imgData.photographer,
+        imageFilename: imgData.imageFilename,//url
+        startingPrice: imgData.startingPrice,
+    });
+}
+
 async function addUser(userData) {
+    console.log(userData);
     return User.create({
+        
         firstName: userData.firstName,
         lastName: userData.lastName,
         password: await User.hashPassword(userData.password),
@@ -41,6 +52,14 @@ async function tryLogin(email, password) {
 //     password: 'blabla',
 //     email: 'dvrbic@gmail.com',
 // });
+
+// addImg({
+//     title: 'prva',
+//     photographer: 'idk',
+//     imageFilename: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiZ5K3X55PkAhU2SxUIHYELADoQMwhCKAIwAg&url=http%3A%2F%2Fqnimate.com%2Funderstanding-html-img-tag%2F&psig=AOvVaw08nQ8GTGPfTIsy1lU6-ZbH&ust=1566471625388765&ictx=3&uact=3',//url
+//     startingPrice: 10,
+
+// })
 
 //tryLogin('dvrbic@gmail.com', 'blabla').then(user => console.log('User: ', user));
 
@@ -83,9 +102,8 @@ async function bid(req, res) {
 }
 
 function allImages(req, res) {
-    Picture.findAll({
-        attributes: ['url', 'title', 'photographer', 'id']
-    })
+    console.log(123);
+    Picture.findAll({attributes: ['url', 'title', 'photographer', 'id']})
         .then(pictures => {
             res.send(JSON.stringify({ "response": pictures }));
         })
@@ -98,6 +116,7 @@ async function specImgage(req, res) {
     Picture.findOne({
         where: {
             id: bidID
+            
         }
     })
         .then(picture => {
@@ -117,12 +136,14 @@ app.post('/login', tryLogin);
 
 app.post('/logout', logout);
 
+app.post('addimg',addImg)
+
 app.get('/bidup/:id', bid);
 
-app.get('/sveslike', allImages);
+app.get('/sveslike', allImages());
 
 app.get('/slika/:id', specImgage);
-
+//test
 app.get('/a', () => {
     console.log(123);
 });
