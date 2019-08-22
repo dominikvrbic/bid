@@ -18,19 +18,47 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-content fill-height>
-      <v-container fill-height>
-        <v-btn to="/images">
-        <v-icon>{{icons.mdiChevronLeft}}</v-icon>
-            Povratak na popis
-        </v-btn>
-        <v-card v-if="image" class="pa-2" outlined tile>
-          <v-img :src="image.imageFilename" />
-          <v-card-title>{{image.title}}</v-card-title>
-          <v-card-text>Fotografer: {{image.photographer}}</v-card-text>
-        </v-card>
-      </v-container>
-    </v-content>
+    <v-card class="mx-auto" min-height="100px"></v-card>
+    <v-card
+    class="mx-auto"
+    max-width="400"
+  >
+    <v-img
+      class="white--text"
+      height="200px"
+      :src="image.imageFilename"
+    >
+      <v-card-title class="align-end fill-height">{{image.title}}</v-card-title>
+    </v-img>
+
+    <v-card-text>
+     
+      <span class="text--primary">
+        <span>Fotografer: {{image.photographer}}</span><br>
+        <span>Pocetna Cijena: {{image.startingPrice}}</span><br>
+        <span>Trenutna Cijena: {{/*bid.price */ }}</span><br>  
+        <span>Whitsunday Island, Whitsunday Islands</span>
+      </span>
+    </v-card-text>
+
+    <v-card-actions>
+      <v-btn
+        to="/images"
+        text
+        color="orange"
+      >
+        Povratak
+      </v-btn>
+      <v-btn
+        text
+        color="orange"
+        @click="bidup"
+
+      >
+        Bid
+      </v-btn>
+    </v-card-actions>
+  </v-card>
   </v-app>
 </template>
 
@@ -55,20 +83,28 @@ export default {
     }
   },
   created() {
+    
     Api.get(`/slika/${this.imageId}`).then(resp => {
-
-      this.image = resp.data;
+      this.bid = resp.data.bid;
+      this.image = resp.data.picture;
     });
   },
   methods: {
+    async own(){
+      if (this.bid.userId === this.user.id){
+
+      }
+    },
+
     async logout() {
       await Api.post("/logout");
       State.user = null;
       this.$router.push("/login");
+    },
+    async bidup(){
+    
+
     }
   }
 };
 </script>
-
-<style>
-</style>

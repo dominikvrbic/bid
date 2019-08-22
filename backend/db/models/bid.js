@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: 'Picture',
-          key: 'id'
+          key: 'id',
+          
         },
     }
   }, {

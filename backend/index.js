@@ -85,12 +85,12 @@ async function tryLogin(email, password) {
 //     email: 'dvrbic@gmail.com',
 // });
 
-// addImg({
-//     title: 'druga',
-//     photographer: 'idk',
-//     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg', //url, max 255 characters
-//     startingPrice: 10,
-// });
+    // addImg({
+    //     title: '18',
+    //     photographer: 'idk',
+    //     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg', //url, max 255 characters
+    //     startingPrice: 10,
+    // });
 
 //tryLogin('dvrbic@gmail.com', 'blabla').then(user => console.log('User: ', user));
 
@@ -153,6 +153,20 @@ async function bid(req, res) {
         .catch(err => res.send({
             message: `nemrem najti id u bazi  : ${err}`
         }));
+        if(!bid.price){
+            Bid.update({
+                price: currentBid + x,
+        
+            }, {
+                    where: { bidID: id }
+                })
+                .then(res.send)({
+                    message: 'bid je uspjesan'
+                })
+                .catch(err => res.send({
+                    message: `nekaj ne valja :${err}`
+                }));
+        }
     Bid.update({
         price: currentBid + x,
 
@@ -179,18 +193,21 @@ function allImages(req, res) {
 }
 
 async function specImgage(req, res) {
-    let bidID = req.params.id;
-    Picture.findOne({
+    let pictureId = req.params.id;
+    const bid = await Bid.findOne({
+        where:{ pictureId },
+        order: [
+            ['createdAt', 'desc']
+        ]
+    });
+
+    const picture = await Picture.findOne({
         where: {
-            id: bidID
+            id: pictureId
         }
-    })
-        .then(picture => {
-            res.json(picture);
-        })
-        .catch(err => res.send({
-            message: `nekaj ne valja :${err}`
-        }));
+    });
+
+    res.json({ picture, bid });
 }
 
 //routing
@@ -211,8 +228,5 @@ app.get('/bidup/:id', bid);
 app.get('/sveslike', allImages);
 
 app.get('/slika/:id', specImgage);
-//test
-app.get('/a', () => {
-    console.log(123);
-});
+
 app.listen(8000);

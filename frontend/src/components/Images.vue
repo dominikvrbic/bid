@@ -18,23 +18,21 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-content fill-height>
+        <v-card class="mx-auto" min-height="60px"></v-card>
+
       <v-container fill-height>
         <v-row v-if="images" no-gutters>
-          <template v-for="img in images">
-            <v-col cols="6" :key="img.id">
-              <v-card :to="`/images/${img.id}`" class="pa-2" outlined tile>
-                <v-img :src="img.imageFilename" />
-                <v-card-title>{{img.title}}</v-card-title>
-                <v-card-text>
-                  Fotografer: {{img.photographer}}
-                </v-card-text>
+        
+             <v-col  :key="img.id" v-for="img in images" cols="4">
+                <v-card :to="`/images/${img.id}`"  outlined tile>
+                  <v-img class="col-12"  aspect-ratio="1" :src="img.imageFilename" />
+                 
               </v-card>
             </v-col>
-          </template>
+  
         </v-row>
       </v-container>
-    </v-content>
+
   </v-app>
 </template>
 
@@ -42,7 +40,6 @@
 import { State } from "../state.js";
 import { mdiAccount } from "@mdi/js";
 import Api from "../api";
-
 export default {
   data() {
     return {
@@ -66,6 +63,7 @@ export default {
       State.user = null;
       this.$router.push("/login");
     }
+    
   }
 };
 </script>
