@@ -11,3 +11,5 @@ router.post('/login', userControlers.login);
 router.post('/logout', userControlers.logout);
 
 router.get('/authStatus', userControlers.authStatus);
+
+module.exports = router;
