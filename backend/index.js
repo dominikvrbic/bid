@@ -78,19 +78,19 @@ async function tryLogin(email, password) {
         return null;
     }
 }
-// addUser({
-//     firstName: 'Dominik',
-//     lastName: 'Vrbic',
-//     password: 'blabla',
-//     email: 'dvrbic@gmail.com',
-// });
+/* addUser({
+     firstName: 'Dominik',
+     lastName: 'Vrbic',
+     password: 'blabla',
+     email: 'dvrbic@gmail.com',
+});
 
-    // addImg({
-    //     title: '18',
-    //     photographer: 'idk',
-    //     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg', //url, max 255 characters
-    //     startingPrice: 10,
-    // });
+addImg({
+     title: '18',
+     photographer: 'idk',
+     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg', //url, max 255 characters
+    startingPrice: 10,
+}); */
 
 //tryLogin('dvrbic@gmail.com', 'blabla').then(user => console.log('User: ', user));
 
@@ -140,35 +140,37 @@ function authStatus(req, res) {
 
 async function bid(req, res) {
 
-    let bidID = req.params.id;
+    let picID = req.params.id;
+    let korisnikId = req.params.korisnikId;
     let currentBid = 0;
     let x = 10;
+    
     Bid.findOne({
         attributes: ['price'],
-        where: { id: bidID }
-    })
-        .then(bid => {
-            currentBid = bid[0].price;
+        where: { pictureId: picID }
+        })
+        .then( bid => {
+            console.log(bid);
+            if (bid === null) {
+                Bid.create({
+                    price: 10,
+                    userId: 2342342,
+                    pictureId: 2
+                });
+            } else {
+                console.log(bid)
+                console.log(currentBid = bid[0].price)
+                currentBid = bid[0].price;
+                res.send({message: "bid je updejtan"})
+            }
         })
         .catch(err => res.send({
+            
             message: `nemrem najti id u bazi  : ${err}`
         }));
-        if(!bid.price){
-            Bid.update({
-                price: currentBid + x,
-        
-            }, {
-                    where: { bidID: id }
-                })
-                .then(res.send)({
-                    message: 'bid je uspjesan'
-                })
-                .catch(err => res.send({
-                    message: `nekaj ne valja :${err}`
-                }));
-        }
-    Bid.update({
+    /* Bid.update({
         price: currentBid + x,
+        userId: korisnikId
 
     }, {
             where: { bidID: id }
@@ -178,7 +180,7 @@ async function bid(req, res) {
         })
         .catch(err => res.send({
             message: `nekaj ne valja :${err}`
-        }));
+    })); */
 }
 
 function allImages(req, res) {
@@ -192,10 +194,39 @@ function allImages(req, res) {
         }));
 }
 
+/* async function specImgage(req, res) {
+    let bidID = req.params.id;
+    /* Bid.findOne({
+        where: {
+            id: bidID
+
+        }
+    })
+        .then(bid => {
+            res.json(bid);
+        })
+        .catch(err => res.send({
+            message: `nekaj ne valja :${err}`
+        })); 
+
+     Picture.findOne({
+         where: {
+            id: bidID
+         }
+     })
+         .then(picture => {
+             res.json(picture);
+         })
+         .catch(err => res.send({
+             message: `nekaj ne valja :${err}`
+        }));
+} */
+
+
 async function specImgage(req, res) {
     let pictureId = req.params.id;
     const bid = await Bid.findOne({
-        where:{ pictureId },
+        where: { pictureId },
         order: [
             ['createdAt', 'desc']
         ]
@@ -223,7 +254,7 @@ app.get('/authStatus', authStatus);
 
 app.post('/addimg', addImg)
 
-app.get('/bidup/:id', bid);
+app.get('/bidup/:id/:korisnikid', bid);
 
 app.get('/sveslike', allImages);
 

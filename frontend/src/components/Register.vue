@@ -45,7 +45,7 @@
                   :rules="passwordValid"
                 ></v-text-field>
               </v-form>
-              <v-btn to="/login" text color="secondary">Register</v-btn>
+              <v-btn @click="submit" text color="secondary">Register</v-btn>
               </v-card-text>
             </v-card>
           </v-col>
