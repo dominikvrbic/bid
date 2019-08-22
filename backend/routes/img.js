@@ -4,7 +4,7 @@ const router = express.Router();
 const imgcontroller = require('../Controllers/img')
 
 
-router.get('/bidup/:id/:korisnikid', imgcontroller.bid);
+router.post('/slika/:id/bid', imgcontroller.bid);
 
 router.post('/addimg', imgcontroller.addImg);
 

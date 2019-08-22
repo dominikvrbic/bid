@@ -19,46 +19,28 @@
       </v-menu>
     </v-app-bar>
     <v-card class="mx-auto" min-height="100px"></v-card>
-    <v-card
-    class="mx-auto"
-    max-width="400"
-  >
-    <v-img
-      class="white--text"
-      height="200px"
-      :src="image.imageFilename"
-    >
-      <v-card-title class="align-end fill-height">{{image.title}}</v-card-title>
-    </v-img>
+    <v-card class="mx-auto" max-width="400" v-if="image">
+      <v-img class="white--text" height="200px" :src="image.imageFilename">
+        <v-card-title class="align-end fill-height">{{image.title}}</v-card-title>
+      </v-img>
 
-    <v-card-text>
-     
-      <span class="text--primary">
-        <span>Fotografer: {{image.photographer}}</span><br>
-        <span>Pocetna Cijena: {{image.startingPrice}}</span><br>
-        <span>Trenutna Cijena: {{/*bid.price */ }}</span><br>  
-        <span>Whitsunday Island, Whitsunday Islands</span>
-      </span>
-    </v-card-text>
+      <v-card-text>
+        <span class="text--primary">
+          <span>Fotografer: {{image.photographer}}</span>
+          <br />
+          <span>Pocetna Cijena: {{image.startingPrice}}</span>
+          <br />
+          <span>Trenutna Cijena: {{bid ? bid.price : 0}}</span>
+          <br />
+          <span>Whitsunday Island, Whitsunday Islands</span>
+        </span>
+      </v-card-text>
 
-    <v-card-actions>
-      <v-btn
-        to="/images"
-        text
-        color="orange"
-      >
-        Povratak
-      </v-btn>
-      <v-btn
-        text
-        color="orange"
-        @click="bidup"
-
-      >
-        Bid
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-card-actions>
+        <v-btn to="/images" text color="orange">Povratak</v-btn>
+        <v-btn text color="orange" @click="bidup">Bid</v-btn>
+      </v-card-actions>
+    </v-card>
   </v-app>
 </template>
 
@@ -71,7 +53,8 @@ export default {
   data() {
     return {
       icons: { mdiAccount, mdiChevronLeft },
-      image: null
+      image: null,
+      bid: null
     };
   },
   computed: {
@@ -83,16 +66,14 @@ export default {
     }
   },
   created() {
-    
     Api.get(`/slika/${this.imageId}`).then(resp => {
       this.bid = resp.data.bid;
       this.image = resp.data.picture;
     });
   },
   methods: {
-    async own(){
-      if (this.bid.userId === this.user.id){
-
+    async own() {
+      if (this.bid.userId === this.user.id) {
       }
     },
 
@@ -101,9 +82,9 @@ export default {
       State.user = null;
       this.$router.push("/login");
     },
-    async bidup(){
-    
-
+    async bidup() {
+      const resp = await Api.post(`/slika/${this.imageId}/bid`);
+      this.bid = resp.data;
     }
   }
 };

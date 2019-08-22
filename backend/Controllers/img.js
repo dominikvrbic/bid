@@ -12,49 +12,42 @@ const Bid = sequelize.import('../db/models/bid.js');
 const Picture = sequelize.import('../db/models/picture.js');
 
 async function bid(req, res) {
+    const pictureId = req.params.id;
+    const userId = req.session.userId;
+    if (!userId) {
+        res.sendStatus(401);
+        return;
+    }
 
-    let picID = req.params.id;
-    let korisnikId = req.params.korisnikId;
-    let currentBid = 0;
-    let x = 10;
+    const bidIncrement = 10;
 
-    Bid.findOne({
-        attributes: ['price'],
-        where: { pictureId: picID }
-    })
-        .then(bid => {
-            console.log(bid);
-            if (bid === null) {
-                Bid.create({
-                    price: 10,
-                    userId: 2342342,
-                    pictureId: 2
-                });
-            } else {
-                console.log(bid)
-                console.log(currentBid = bid[0].price)
-                currentBid = bid[0].price;
-                res.send({ message: "bid je updejtan" })
-            }
-        })
-        .catch(err => res.send({
+    const prevBid = await Bid.findOne({
+        where: { pictureId },
+        order: [
+            ['createdAt', 'desc']
+        ]
+    });
 
-            message: `nemrem najti id u bazi  : ${err}`
-        }));
-    /* Bid.update({
-        price: currentBid + x,
-        userId: korisnikId
+    const currentPrice = prevBid ? prevBid.price : 0;
+    const nextPrice = currentPrice + bidIncrement;
+    console.log('Current: ', currentPrice);
+    console.log('Next: ', nextPrice);
 
-    }, {
-            where: { bidID: id }
-        })
-        .then(res.send)({
-            message: 'bid je uspjesan'
-        })
-        .catch(err => res.send({
-            message: `nekaj ne valja :${err}`
-    })); */
+    await Bid.create({
+        userId,
+        pictureId,
+        price: nextPrice,
+    });
+
+    const newBid = await Bid.findOne({
+        where: { pictureId },
+        order: [
+            ['createdAt', 'desc']
+        ]
+    });
+    res.json(newBid);
 }
+
 async function addImg(imgData) {
     return Picture.create({
         title: imgData.title,
