@@ -1,12 +1,8 @@
 const express = require('express');
 const cookieSession = require('cookie-session');
-const enableWs = require('express-ws');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const routerUser = require('./routes/user');
 const routerImg = require('./routes/img');
-
-
 const app = express();
 app.use(cors({
     origin: 'http://localhost:8080',
@@ -21,6 +17,4 @@ app.use(cookieSession({
 }));
 app.use(routerUser);
 app.use(routerImg);
-enableWs(app);
-app.use(bodyParser.json());
 app.listen(8000);
