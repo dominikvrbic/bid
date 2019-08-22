@@ -1,7 +1,7 @@
 <template>
   <v-app id="bid">
     <v-app-bar color="primary" dark fixed app>
-      <v-toolbar-title>Odabir mentora</v-toolbar-title>
+      <v-toolbar-title>Aukcija</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -22,7 +22,7 @@
       <v-container fill-height>
         <v-row v-if="images" no-gutters>
           <template v-for="img in images">
-            <v-col cols="4" :key="img.id">
+            <v-col cols="6" :key="img.id">
               <v-card :to="`/images/${img.id}`" class="pa-2" outlined tile>
                 <v-img :src="img.imageFilename" />
                 <v-card-title>{{img.title}}</v-card-title>

@@ -1,7 +1,7 @@
 <template>
   <v-app id="bid">
     <v-app-bar color="primary" dark fixed app>
-      <v-toolbar-title>Odabir mentora</v-toolbar-title>
+      <v-toolbar-title>Aukcija</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">

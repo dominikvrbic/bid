@@ -86,9 +86,9 @@ async function tryLogin(email, password) {
 // });
 
 // addImg({
-//     title: 'prva',
+//     title: 'druga',
 //     photographer: 'idk',
-//     imageFilename: 'https://imgur.com/EawenPh', //url, max 255 characters
+//     imageFilename: 'http://qnimate.com/wp-content/uploads/2014/03/images2.jpg', //url, max 255 characters
 //     startingPrice: 10,
 // });
 
@@ -204,7 +204,7 @@ app.post('/logout', logout);
 
 app.get('/authStatus', authStatus);
 
-app.post('addimg', addImg)
+app.post('/addimg', addImg)
 
 app.get('/bidup/:id', bid);
 
@@ -215,5 +215,4 @@ app.get('/slika/:id', specImgage);
 app.get('/a', () => {
     console.log(123);
 });
-
 app.listen(8000);
