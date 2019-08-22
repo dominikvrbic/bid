@@ -101,3 +101,16 @@ async function specImgage(req, res) {
 
     res.json({ picture, bid });
 }
+
+async function myBids(req, res){
+    Bid.findAll({ attributes: ['imageFilename', 'title', 'photographer', 'id'],
+    where: { userId: korisnikId } })
+    .then(myPictures => {
+        res.json(myPictures);
+    })
+    .catch(err => res.send({
+        message: `nekaj ne valja :${err}`
+    }));
+
+
+}
