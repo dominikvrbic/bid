@@ -28,11 +28,13 @@
         <span class="text--primary">
           <span>Fotografer: {{image.photographer}}</span>
           <br />
-          <span>Pocetna Cijena: {{image.startingPrice}}</span>
+          <span>Starting Price: {{image.startingPrice}}</span>
           <br />
-          <span>Trenutna Cijena: {{bid ? bid.price : 0}}</span>
+          <span>Currunt Price: {{bid ? bid.price : 0}}</span>
           <br />
-          <span>Whitsunday Island, Whitsunday Islands</span>
+          <template v-if="bid.userId === user.id">
+          <span >You are the highest bidder</span>
+          </template>
         </span>
       </v-card-text>
 
@@ -72,11 +74,6 @@ export default {
     });
   },
   methods: {
-    async own() {
-      if (this.bid.userId === this.user.id) {
-      }
-    },
-
     async logout() {
       await Api.post("/logout");
       State.user = null;
