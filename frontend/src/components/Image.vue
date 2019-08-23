@@ -50,6 +50,7 @@
 import { State } from "../state.js";
 import { mdiAccount, mdiChevronLeft } from "@mdi/js";
 import Api from "../api";
+import openSocket from "socket.io-client";
 
 export default {
   data() {

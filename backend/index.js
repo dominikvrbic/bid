@@ -19,4 +19,6 @@ app.use(cookieSession({
 app.use(bodyParser.json());
 app.use(routerUser);
 app.use(routerImg);
-app.listen(8000);
+const server = app.listen(8000);
+const io = require('socket.io')(server);
+

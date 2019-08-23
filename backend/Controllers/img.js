@@ -12,11 +12,8 @@ const Bid = sequelize.import('../db/models/bid.js');
 const Picture = sequelize.import('../db/models/picture.js');
 
 
-const expressWs = require('express-ws')(app);
-
 
 async function bid(req, res) {
-    expressWs.send
     const pictureId = req.params.id;
     const userId = req.session.userId;
     if (!userId) {
