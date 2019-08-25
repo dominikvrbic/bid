@@ -50,14 +50,14 @@
 import { State } from "../state.js";
 import { mdiAccount, mdiChevronLeft } from "@mdi/js";
 import Api from "../api";
-import openSocket from "socket.io-client";
 
 export default {
   data() {
     return {
       icons: { mdiAccount, mdiChevronLeft },
       image: null,
-      bid: null
+      bid: null,
+      onBidHandler: null,
     };
   },
   computed: {
@@ -73,6 +73,15 @@ export default {
       this.bid = resp.data.bid;
       this.image = resp.data.picture;
     });
+    this.onBidHandler = this.onBidUpdate.bind(this);
+    State.websocket.on('bid', this.onBidHandler);
+  },
+  beforeDestroy() {
+    console.log('Destroy!');
+    if (this.onBidHandler) {
+      State.websocket.off('bid', this.onBidHandler);
+      this.onBidHandler = null;
+    }
   },
   methods: {
     async logout() {
@@ -83,6 +92,13 @@ export default {
     async bidup() {
       const resp = await Api.post(`/slika/${this.imageId}/bid`);
       this.bid = resp.data;
+    },
+    onBidUpdate(bid) {
+      console.log('New bid: ', bid);
+      if (bid.pictureId == this.imageId) {
+        console.log('Ours!');
+        this.bid = bid;
+      }
     }
   }
 };

@@ -11,7 +11,10 @@ const User = sequelize.import('../db/models/user.js');
 const Bid = sequelize.import('../db/models/bid.js');
 const Picture = sequelize.import('../db/models/picture.js');
 
-
+function wsSend(socket, type, data) {
+    const msg = { type, data };
+    socket.send(JSON.stringify(msg));
+}
 
 async function bid(req, res) {
     const pictureId = req.params.id;
@@ -47,6 +50,9 @@ async function bid(req, res) {
             ['createdAt', 'desc']
         ]
     });
+
+    global.websocket.getWss().clients.forEach(client => wsSend(client, 'bid', newBid));
+
     res.json(newBid);
 }
 
@@ -76,9 +82,6 @@ function allImages(req, res) {
         }));
 }
 
-
-
-
 async function specImgage(req, res) {
     let pictureId = req.params.id;
     const bid = await Bid.findOne({
@@ -97,15 +100,15 @@ async function specImgage(req, res) {
     res.json({ picture, bid });
 }
 
-async function myBids(req, res){
-    Bid.findAll({ attributes: ['imageFilename', 'title', 'photographer', 'id'],
-    where: { userId: korisnikId } })
-    .then(myPictures => {
-        res.json(myPictures);
+async function myBids(req, res) {
+    Bid.findAll({
+        attributes: ['imageFilename', 'title', 'photographer', 'id'],
+        where: { userId: korisnikId }
     })
-    .catch(err => res.send({
-        message: `nekaj ne valja :${err}`
-    }));
-
-
+        .then(myPictures => {
+            res.json(myPictures);
+        })
+        .catch(err => res.send({
+            message: `nekaj ne valja :${err}`
+        }));
 }

@@ -10,6 +10,9 @@ import Register from './components/Register.vue';
 
 import { State } from './state';
 
+import Socket from './socket';
+State.websocket = new Socket('ws://localhost:8000');
+
 Vue.config.productionTip = false;
 
 const router = new VueRouter({
